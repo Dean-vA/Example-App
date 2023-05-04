@@ -3,4 +3,4 @@ sphinx_rtd_theme
 tensorflow
 numpy
 matplotlib
-PIL
+Pillow
