@@ -13,8 +13,6 @@ Welcome to MNIST Project's documentation!
 Introduction
 ============
 
-DID THE TEST WORK?
-
 This documentation covers the usage and functionality of the following modules:
 
 - ``train``: A module that trains a neural network model for digit recognition using the MNIST dataset.

@@ -3,7 +3,7 @@ import os
 import sys
 
 # Add the path to the folder containing your Python source code files
-sys.path.insert(0, os.path.abspath('../src'))
+sys.path.insert(0, os.path.abspath('..'))
 
 # Configuration file for the Sphinx documentation builder.
 #
