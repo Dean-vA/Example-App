@@ -38,9 +38,3 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
-
-import train
-import predict
-
-print("Train module path:", train.__file__)
-print("Predict module path:", predict.__file__)
