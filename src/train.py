@@ -6,6 +6,8 @@ from model import create_model
 def train_and_evaluate() -> None:
     """
     Load and preprocess the MNIST data, create and train a model, evaluate its performance, and save the trained model.
+    
+    DID THE EST WORK
     """
     # Load and preprocess data
     (train_images, train_labels), (test_images, test_labels) = load_and_preprocess_data()
