@@ -1,4 +1,5 @@
 import tensorflow as tf
+import os
 
 def create_model():
     # Create the model architecture
@@ -11,5 +12,22 @@ def create_model():
     tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(10, activation='softmax')
 ])
+
+    return model
+
+def load_model(model_path: str) -> tf.keras.Model:
+    """
+    Load a saved TensorFlow model from the specified path.
+
+    Args:
+        model_path (str): Path to the saved model.
+
+    Returns:
+        tf.keras.Model: Loaded model.
+    """
+    if os.path.exists(model_path):
+        model = tf.keras.models.load_model(model_path)
+    else:
+        print(f"No model file found at {model_path}")
 
     return model

@@ -1,6 +1,6 @@
 import os
 import tensorflow as tf
-from data import load_and_preprocess_data
+from load_data import load_and_preprocess_data
 from model import create_model
 
 def train_and_evaluate() -> None:
@@ -17,13 +17,17 @@ def train_and_evaluate() -> None:
 
     # Train the model
     model.compile(optimizer='adam',
-                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
                   metrics=['accuracy'])
     model.fit(train_images, train_labels, epochs=10, validation_split=0.1)
 
     # Evaluate the model
     test_loss, test_accuracy = model.evaluate(test_images, test_labels)
     print(f'Test accuracy: {test_accuracy * 100:.2f}%')
+
+    #check if the model directory exists
+    if not os.path.exists('models/mnist_model'):
+        os.makedirs('models/mnist_model')
 
     # Save the trained model
     model.save('models/mnist_model')

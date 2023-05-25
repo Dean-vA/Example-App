@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "number_predictor"
+version = "0.1.0"
+description = "Predict numbers based on images"
+authors = ["Dean <aswegen.d@buas.nl>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.10"
+numpy = ">=1.20,<=1.24"
+pillow = "^9.5.0"
+fastapi = "^0.95.1"
+uvicorn = "^0.22.0"
+tensorflow = ">=2.7,<2.10.9"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.0.0"
+black = "^23.3.0"
+Sphinx = "^7.0.1"
+pytest = "^7.3.1"
+ipykernel = "^6.23.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
