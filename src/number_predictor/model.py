@@ -27,7 +27,7 @@ def load_model(model_path: str) -> tf.keras.Model:
     """
     if os.path.exists(model_path):
         model = tf.keras.models.load_model(model_path)
+        return model
     else:
         print(f"No model file found at {model_path}")
-
-    return model
+        return None

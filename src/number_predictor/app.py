@@ -1,7 +1,7 @@
 from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
 from model import load_model 
-from load_data import load_and_preprocess_image
+from load_data import load_and_preprocess_image, load_and_preprocess_image_file
 from predict import predict_digit
 
 class ImagePath(BaseModel):
@@ -14,6 +14,9 @@ class ImagePath(BaseModel):
     path_to_img: str
 
 app = FastAPI()
+
+# Load the saved model
+model = load_model('models/mnist_model')
 
 @app.get("/")
 def read_root():
@@ -50,9 +53,6 @@ def predict(image_path: ImagePath):
         dict: Predicted digit and confidence.
     """
 
-    # Load the saved model
-    model = load_model('../models/mnist_model')
-
     # Load and preprocess the input image
     image = load_and_preprocess_image(image_path.path_to_img)
 
@@ -73,11 +73,8 @@ def predict_file(image_file: UploadFile = File(...)):
         dict: Predicted digit and confidence.
     """
 
-    # Load the saved model
-    model = load_model('../models/mnist_model')
-
     # Load and preprocess the input image
-    image = load_and_preprocess_image(image_file.file)
+    image = load_and_preprocess_image_file(image_file.file)
 
     # Predict the digit
     predicted_digit, confidence = predict_digit(model, image)
