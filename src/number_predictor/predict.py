@@ -16,7 +16,7 @@ def predict_digit(model: tf.keras.Model, image: np.ndarray) -> int:
     Returns:
         int: Predicted digit.
     """
-    # Ensure the image has the right dimensions for the model
+    # Ensure the image has the right dimensions for the model (batch, height, width, channels)
     image = np.expand_dims(image, axis=0)
     image = np.expand_dims(image, axis=-1)
 

@@ -81,7 +81,7 @@ def load_and_preprocess_image(image_path: str) -> np.ndarray:
     Returns:
         np.ndarray: Preprocessed image array.
     """
-
+    # Check if the image file exists at the specified path and load it if it does.
     if os.path.isfile(image_path):
         with Image.open(image_path) as img:
             img = img.convert('L')  # Convert to grayscale
@@ -104,16 +104,12 @@ def load_and_preprocess_image_file(image_file: io.BytesIO) -> np.ndarray:
     """
     # Load the image file
     image = Image.open(image_file)
-
     # Convert the image to grayscale
     image = image.convert('L')
-
     # Resize the image to match the input shape that the model expects
     image = image.resize((28, 28))
-
     # Convert the image to a numpy array
     image_array = np.array(image)
-
     # Normalize the image array
     image_array = image_array / 255.0
 

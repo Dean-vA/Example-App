@@ -25,6 +25,7 @@ def load_model(model_path: str) -> tf.keras.Model:
     Returns:
         tf.keras.Model: Loaded model.
     """
+    # Check if the model file exists at the specified path and load it if it does.
     if os.path.exists(model_path):
         model = tf.keras.models.load_model(model_path)
         return model
