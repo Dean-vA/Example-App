@@ -6,7 +6,7 @@ from model import create_model
 import argparse
 import matplotlib.pyplot as plt
 
-def train(use_uri,uri=None,model_path=None) -> None:
+def train(use_uri,uri=None,model_path=None,test_train_ratio=0.1) -> None:
     """
     This function takes in three arguments. The use_uri flag indicates whether to use the built-in data 
     or to load it from a specified URI. The uri is a string that points to the data's location, and model_path 
@@ -41,7 +41,7 @@ def train(use_uri,uri=None,model_path=None) -> None:
     model.compile(optimizer='adam',
                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
                   metrics=['accuracy'])
-    history = model.fit(train_images, train_labels, epochs=1, validation_split=0.1)
+    history = model.fit(train_images, train_labels, epochs=1, validation_split=test_train_ratio)
 
     # Log the model summary to MLflow
     mlflow.log_text("model_summary.txt", str(model.summary()))
@@ -83,6 +83,7 @@ if __name__ == '__main__':
     parser.add_argument('--use-uri', action='store_true', help='Use the MNIST dataset from the Keras API')
     parser.add_argument('--data-path', type=str, default='data', help='Path to the MNIST dataset')
     parser.add_argument('--model-path', type=str, default='outputs/mnist_model', help='Path to the trained model')
+    parser.add_argument('--test-train-ratio', type=float, default=0.1, help='Ratio of test to train data')
     args = parser.parse_args()
     
-    train(args.use_uri,args.data_path,args.model_path)
+    train(args.use_uri,args.data_path,args.model_path,args.test_train_ratio)
