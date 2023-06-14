@@ -3,7 +3,6 @@ from azure.identity import ClientSecretCredential
 from azure.ai.ml.entities import ManagedOnlineEndpoint, ManagedOnlineDeployment, CodeConfiguration
 import datetime
 
-
 # Define your Azure ML settings
 subscription_id = "0a94de80-6d3b-49f2-b3e9-ec5818862801"
 resource_group = "dean-sandbox"
@@ -66,7 +65,7 @@ blue_deployment = ManagedOnlineDeployment(
     code_configuration=CodeConfiguration(
         code="./src/number_predictor", scoring_script="scoring.py"
     ),
-    instance_type="Standard_DS3_v2",
+    instance_type="Standard_DS1_v2",#"Standard_DS3_v2",#Standard_D2_v2
     instance_count=1,
 )
 

@@ -18,11 +18,15 @@ def init():
 
 def run(raw_data):
     # Load the JSON data from the POST request
+    print(f"raw_data: {raw_data}")
     data = json.loads(raw_data)
+    print(f"data: {data}")
     # Get the base64-encoded image data
     base64_image = data['data']
+    print(f"base64_image: {base64_image}")
     # Decode the base64 string into bytes
     image_bytes = base64.b64decode(base64_image)
+    print(f"image_bytes: {image_bytes}")
     # Open the bytes as an image
     image = Image.open(io.BytesIO(image_bytes))
     # Convert the image to grayscale
@@ -36,7 +40,9 @@ def run(raw_data):
     data = np.expand_dims(data, axis=(0, -1))
     # Make prediction
     prediction = model.predict(data)
-    return json.dumps(prediction.tolist())
+    # Get the predicted label
+    predicted_label = np.argmax(prediction, axis=1)[0]
+    return json.dumps(predicted_label.tolist())
 
 
 def list_files(startpath):
