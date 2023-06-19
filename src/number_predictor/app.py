@@ -83,10 +83,10 @@ def predict_file(image_file: UploadFile = File(...)):
 
 
 
-if __name__ == '__main__':
-    """
-    Run the API server.
-    """
+# if __name__ == '__main__':
+#     """
+#     Run the API server.
+#     """
 
-    import uvicorn
-    uvicorn.run(app, host="localhost", port=8000)
+#     import uvicorn
+#     uvicorn.run(app, host="localhost", port=8000)

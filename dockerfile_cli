@@ -15,12 +15,10 @@ COPY . /app
 # Install poetry
 RUN pip install poetry
 
-# Install only runtime dependencies using poetry
-RUN poetry config virtualenvs.create false && poetry install --only main
+# Install dependencies using poetry
+RUN poetry config virtualenvs.create false && poetry install
 
-# Install additional dependencies
-# This is needed for the FastAPI app to accept file uploads
-RUN pip install python-multipart
-
-# Set the startup command to run your API
-ENTRYPOINT ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
+# Set the startup command to run your binary
+ENTRYPOINT ["/bin/bash"]
+# Display help by default
+#CMD ["python", "predict.py", "--help"]

@@ -41,7 +41,7 @@ def train(use_uri,uri=None,model_path=None,test_train_ratio=0.1) -> None:
     model.compile(optimizer='adam',
                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
                   metrics=['accuracy'])
-    history = model.fit(train_images, train_labels, epochs=1, validation_split=test_train_ratio)
+    history = model.fit(train_images, train_labels, epochs=10, validation_split=test_train_ratio)
 
     # Log the model summary to MLflow
     mlflow.log_text("model_summary.txt", str(model.summary()))

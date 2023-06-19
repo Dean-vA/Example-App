@@ -46,13 +46,14 @@ print(f"Endpoint {endpoint.name} provisioning state: {endpoint.provisioning_stat
 #     f'Endpoint "{endpoint.name}" with provisioning state "{endpoint.provisioning_state}" is retrieved'
 # )
 
-registered_model_name = "example"
+registered_model_name = "example_2"
 latest_model_version = 1
 registered_environment_name = "aml-keras-mnist"
 latest_environment_version = 11
 
 # picking the model to deploy. Here we use the latest version of our registered model
 model = ml_client.models.get(name=registered_model_name, version=latest_model_version)
+model2 = ml_client.models.get(name=registered_model_name, version=latest_model_version)
 # picking the environment to deploy. Here we use the latest version of our registered environment
 env = ml_client.environments.get(name=registered_environment_name, version=latest_environment_version)
 
@@ -60,7 +61,7 @@ print("Creating deployment...")
 blue_deployment = ManagedOnlineDeployment(
     name="blue",
     endpoint_name=endpoint_name,
-    model=model,
+    model=[model,model2],
     environment=env,
     code_configuration=CodeConfiguration(
         code="./src/number_predictor", scoring_script="scoring.py"
@@ -71,4 +72,8 @@ blue_deployment = ManagedOnlineDeployment(
 
 blue_deployment = ml_client.begin_create_or_update(blue_deployment).result()
 
-ml_client.online_endpoints.get(name=endpoint_name)
+print(f"Deployment {blue_deployment.name} provisioning state: {blue_deployment.provisioning_state}")
+
+endpoint = ml_client.online_endpoints.get(name=endpoint_name)
+# Update the traffic distribution
+endpoint.traffic["blue"] = 100

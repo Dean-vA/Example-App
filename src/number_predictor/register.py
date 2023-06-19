@@ -37,7 +37,7 @@ def register_model_if_accuracy_above_threshold(model_path, accuracy_folder, thre
         model = Model(
             path=model_path,
             type=AssetTypes.CUSTOM_MODEL,
-            name="example",
+            name="example_2",
             description="Model created from pipeline",
         )
 

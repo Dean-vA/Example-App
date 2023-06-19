@@ -7,8 +7,8 @@ from azure.mgmt.containerinstance.models import (ContainerGroup, Container, Reso
 # Replace with your own values
 SUBSCRIPTION_ID ="0a94de80-6d3b-49f2-b3e9-ec5818862801"
 RESOURCE_GROUP = "dean-sandbox"
-CONTAINER_NAME = "test-api-image"
-IMAGE = 'deanis/test-api-image:latest'  # Docker Hub image
+CONTAINER_NAME = "test-api-image-2"
+IMAGE = 'deanis/digit-predict-api:latest'  # Docker Hub image
 CPU_CORE_COUNT = 1.0
 MEMORY_GB = 1.5
 TENANT_ID = "0a33589b-0036-4fe8-a829-3ed0926af886"
