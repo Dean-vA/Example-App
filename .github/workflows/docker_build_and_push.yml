@@ -1,0 +1,17 @@
+name: Docker Build and Push
+on: [push]
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push Docker image
+        run: |
+          docker build . -t your-dockerhub-username/your-repo:${{ github.sha }}
+          docker push your-dockerhub-username/your-repo:${{ github.sha }}

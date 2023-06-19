@@ -15,4 +15,4 @@ jobs:
           pip install flake8
       - name: Run lint check
         run: |
-          flake8 .
+          flake8 . --max-line-length=88
