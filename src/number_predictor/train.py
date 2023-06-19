@@ -1,18 +1,21 @@
-import os
-import tensorflow as tf
-import mlflow
-from load_data import load_and_preprocess_data, load_and_preprocess_data_from_uri
-from model import create_model
 import argparse
-import matplotlib.pyplot as plt
+import os
 
-def train(use_uri,uri=None,model_path=None,test_train_ratio=0.1) -> None:
+import matplotlib.pyplot as plt
+import mlflow
+import tensorflow as tf
+from load_data import (load_and_preprocess_data,
+                       load_and_preprocess_data_from_uri)
+from model import create_model
+
+
+def train(use_uri, uri=None, model_path=None, test_train_ratio=0.1) -> None:
     """
-    This function takes in three arguments. The use_uri flag indicates whether to use the built-in data 
-    or to load it from a specified URI. The uri is a string that points to the data's location, and model_path 
+    This function takes in three arguments. The use_uri flag indicates whether to use the built-in data
+    or to load it from a specified URI. The uri is a string that points to the data's location, and model_path
     is a string specifying where to save the trained model.
 
-    The function loads and preprocesses the MNIST data, creates and trains a model, evaluates its performance, 
+    The function loads and preprocesses the MNIST data, creates and trains a model, evaluates its performance,
     and saves the trained model.
 
     Args:
@@ -30,7 +33,10 @@ def train(use_uri,uri=None,model_path=None,test_train_ratio=0.1) -> None:
 
     if not use_uri:
         # Load and preprocess data
-        (train_images, train_labels), (test_images, test_labels) = load_and_preprocess_data()
+        (train_images, train_labels), (
+            test_images,
+            test_labels,
+        ) = load_and_preprocess_data()
     else:
         train_images, train_labels = load_and_preprocess_data_from_uri(uri)
 
@@ -38,10 +44,14 @@ def train(use_uri,uri=None,model_path=None,test_train_ratio=0.1) -> None:
     model = create_model()
 
     # Train the model
-    model.compile(optimizer='adam',
-                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
-                  metrics=['accuracy'])
-    history = model.fit(train_images, train_labels, epochs=10, validation_split=test_train_ratio)
+    model.compile(
+        optimizer="adam",
+        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
+        metrics=["accuracy"],
+    )
+    history = model.fit(
+        train_images, train_labels, epochs=10, validation_split=test_train_ratio
+    )
 
     # Log the model summary to MLflow
     mlflow.log_text("model_summary.txt", str(model.summary()))
@@ -64,7 +74,7 @@ def train(use_uri,uri=None,model_path=None,test_train_ratio=0.1) -> None:
     plt.legend(loc="lower left")
     mlflow.log_figure(fig, "metrics.png")
 
-    #check if the model directory exists
+    # check if the model directory exists
     if not os.path.exists(model_path):
         os.makedirs(model_path)
 
@@ -77,13 +87,32 @@ def train(use_uri,uri=None,model_path=None,test_train_ratio=0.1) -> None:
     # End the MLflow run
     mlflow.end_run()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # define arguments using argparse
-    parser = argparse.ArgumentParser(description='Train a model to recognize handwritten digits from the MNIST dataset.')
-    parser.add_argument('--use-uri', action='store_true', help='Use the MNIST dataset from the Keras API')
-    parser.add_argument('--data-path', type=str, default='data', help='Path to the MNIST dataset')
-    parser.add_argument('--model-path', type=str, default='outputs/mnist_model', help='Path to the trained model')
-    parser.add_argument('--test-train-ratio', type=float, default=0.1, help='Ratio of test to train data')
+    parser = argparse.ArgumentParser(
+        description="Train a model to recognize handwritten digits from the MNIST dataset."
+    )
+    parser.add_argument(
+        "--use-uri",
+        action="store_true",
+        help="Use the MNIST dataset from the Keras API",
+    )
+    parser.add_argument(
+        "--data-path", type=str, default="data", help="Path to the MNIST dataset"
+    )
+    parser.add_argument(
+        "--model-path",
+        type=str,
+        default="outputs/mnist_model",
+        help="Path to the trained model",
+    )
+    parser.add_argument(
+        "--test-train-ratio",
+        type=float,
+        default=0.1,
+        help="Ratio of test to train data",
+    )
     args = parser.parse_args()
-    
-    train(args.use_uri,args.data_path,args.model_path,args.test_train_ratio)
+
+    train(args.use_uri, args.data_path, args.model_path, args.test_train_ratio)

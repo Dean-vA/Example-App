@@ -1,7 +1,9 @@
-from azure.ai.ml import MLClient
-from azure.identity import ClientSecretCredential
-from azure.ai.ml.entities import ManagedOnlineEndpoint, ManagedOnlineDeployment, CodeConfiguration
 import datetime
+
+from azure.ai.ml import MLClient
+from azure.ai.ml.entities import (CodeConfiguration, ManagedOnlineDeployment,
+                                  ManagedOnlineEndpoint)
+from azure.identity import ClientSecretCredential
 
 # Define your Azure ML settings
 subscription_id = "0a94de80-6d3b-49f2-b3e9-ec5818862801"
@@ -23,9 +25,7 @@ print(f"Endpoint name: {endpoint_name}")
 print("Creating endpoint...")
 # create an online endpoint
 endpoint = ManagedOnlineEndpoint(
-    name = endpoint_name, 
-    description="this is a sample endpoint",
-    auth_mode="key"
+    name=endpoint_name, description="this is a sample endpoint", auth_mode="key"
 )
 
 endpoint = ml_client.online_endpoints.begin_create_or_update(endpoint).result()
@@ -55,24 +55,28 @@ latest_environment_version = 11
 model = ml_client.models.get(name=registered_model_name, version=latest_model_version)
 model2 = ml_client.models.get(name=registered_model_name, version=latest_model_version)
 # picking the environment to deploy. Here we use the latest version of our registered environment
-env = ml_client.environments.get(name=registered_environment_name, version=latest_environment_version)
+env = ml_client.environments.get(
+    name=registered_environment_name, version=latest_environment_version
+)
 
 print("Creating deployment...")
 blue_deployment = ManagedOnlineDeployment(
     name="blue",
     endpoint_name=endpoint_name,
-    model=[model,model2],
+    model=[model, model2],
     environment=env,
     code_configuration=CodeConfiguration(
         code="./src/number_predictor", scoring_script="scoring.py"
     ),
-    instance_type="Standard_DS1_v2",#"Standard_DS3_v2",#Standard_D2_v2
+    instance_type="Standard_DS1_v2",  # "Standard_DS3_v2",#Standard_D2_v2
     instance_count=1,
 )
 
 blue_deployment = ml_client.begin_create_or_update(blue_deployment).result()
 
-print(f"Deployment {blue_deployment.name} provisioning state: {blue_deployment.provisioning_state}")
+print(
+    f"Deployment {blue_deployment.name} provisioning state: {blue_deployment.provisioning_state}"
+)
 
 endpoint = ml_client.online_endpoints.get(name=endpoint_name)
 # Update the traffic distribution

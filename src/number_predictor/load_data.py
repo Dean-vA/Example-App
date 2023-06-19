@@ -1,16 +1,17 @@
-import numpy as np
-from tensorflow.keras.datasets import mnist
-import tensorflow as tf
-from PIL import Image
-import os
 import io
+import os
 from typing import Tuple
+
+import numpy as np
+from PIL import Image
+from tensorflow.keras.datasets import mnist
+
 
 def load_and_preprocess_data_from_uri(uri: str) -> Tuple[np.ndarray, np.ndarray]:
     """
     Loads and preprocesses image data from a given URI.
 
-    The function assumes a directory structure where each subdirectory's name is 
+    The function assumes a directory structure where each subdirectory's name is
     an integer that corresponds to the label of all images within that directory.
     Images are assumed to be .png files.
 
@@ -25,9 +26,9 @@ def load_and_preprocess_data_from_uri(uri: str) -> Tuple[np.ndarray, np.ndarray]
         Returns a tuple of numpy arrays, the first array contains the images,
         the second array contains the corresponding labels.
     """
-    
-    print(f'Loading data from {uri}...')
-    print('Found the following folders in the directory:', os.listdir(uri))
+
+    print(f"Loading data from {uri}...")
+    print("Found the following folders in the directory:", os.listdir(uri))
 
     image_list = []
     label_list = []
@@ -35,18 +36,23 @@ def load_and_preprocess_data_from_uri(uri: str) -> Tuple[np.ndarray, np.ndarray]
     # Iterate over all folders in base_path
     for folder_name in os.listdir(uri):
         folder_path = os.path.join(uri, folder_name)
-        
+
         if os.path.isdir(folder_path):
-            # Ensure the folder name can be converted to an integer (i.e., 0-9 or any digit)
+            # Ensure the folder name can be converted to an integer
+            # (i.e., 0-9 or any digit)
             try:
                 label = int(folder_name)
             except ValueError:
-                print(f'Non-integer folder name {folder_name} encountered. Skipping this folder.')
+                print(
+                    f"Non-integer folder name {folder_name} encountered. Skipping this folder."
+                )
                 continue
-            
+
             # Iterate over all files in the folder
             for filename in os.listdir(folder_path):
-                if filename.endswith('.jpg'):  # Assuming images are .png. Change this if needed
+                if filename.endswith(
+                    ".jpg"
+                ):  # Assuming images are .png. Change this if needed
                     image_path = os.path.join(folder_path, filename)
                     image = Image.open(image_path)
                     image_np = np.array(image)  # Convert to numpy array
@@ -57,9 +63,10 @@ def load_and_preprocess_data_from_uri(uri: str) -> Tuple[np.ndarray, np.ndarray]
     train_images = np.array(image_list) / 255.0
     train_labels = np.array(label_list)
 
-    print(f'Loaded {len(train_images)} images and {len(train_labels)} labels.')
+    print(f"Loaded {len(train_images)} images and {len(train_labels)} labels.")
 
     return (train_images, train_labels)
+
 
 def load_and_preprocess_data():
     # Load the MNIST dataset
@@ -70,6 +77,7 @@ def load_and_preprocess_data():
     test_images = test_images / 255.0
 
     return (train_images, train_labels)
+
 
 def load_and_preprocess_image(image_path: str) -> np.ndarray:
     """
@@ -84,14 +92,15 @@ def load_and_preprocess_image(image_path: str) -> np.ndarray:
     # Check if the image file exists at the specified path and load it if it does.
     if os.path.isfile(image_path):
         with Image.open(image_path) as img:
-            img = img.convert('L')  # Convert to grayscale
+            img = img.convert("L")  # Convert to grayscale
             img = img.resize((28, 28), Image.ANTIALIAS)  # Resize to 28x28 pixels
             image = np.array(img) / 255.0  # Normalize pixel values
             return image
     else:
         print(f"No image file found at {image_path}")
         return None
-    
+
+
 def load_and_preprocess_image_file(image_file: io.BytesIO) -> np.ndarray:
     """
     Load an image file and preprocess it for prediction.
@@ -105,7 +114,7 @@ def load_and_preprocess_image_file(image_file: io.BytesIO) -> np.ndarray:
     # Load the image file
     image = Image.open(image_file)
     # Convert the image to grayscale
-    image = image.convert('L')
+    image = image.convert("L")
     # Resize the image to match the input shape that the model expects
     image = image.resize((28, 28))
     # Convert the image to a numpy array

@@ -1,9 +1,10 @@
 import argparse
+
 import numpy as np
 import tensorflow as tf
-from PIL import Image
 from load_data import load_and_preprocess_image
 from model import load_model
+
 
 def predict_digit(model: tf.keras.Model, image: np.ndarray) -> int:
     """
@@ -27,6 +28,7 @@ def predict_digit(model: tf.keras.Model, image: np.ndarray) -> int:
 
     return predicted_digit, confidence
 
+
 def main(args):
     """
     Main function.
@@ -36,18 +38,21 @@ def main(args):
     """
     path = args.image_path
     # Load the saved model
-    model = load_model('../../models/mnist_model')
+    model = load_model("../../models/mnist_model")
 
     # Load and preprocess the input image
-    image = load_and_preprocess_image(args.image_path)
+    image = load_and_preprocess_image(path)
 
     # Predict the digit
     predicted_digit, confidence = predict_digit(model, image)
 
-    print(f'Predicted digit: {predicted_digit}')
+    print(f"Predicted digit: {predicted_digit}")
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Predict a digit from an image using a trained MNIST model.')
-    parser.add_argument('image_path', help='Path to the input image file.')
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Predict a digit from an image using a trained MNIST model."
+    )
+    parser.add_argument("image_path", help="Path to the input image file.")
     args = parser.parse_args()
     main(args)

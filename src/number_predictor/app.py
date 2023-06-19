@@ -1,8 +1,9 @@
 from fastapi import FastAPI, File, UploadFile
-from pydantic import BaseModel
-from model import load_model 
 from load_data import load_and_preprocess_image, load_and_preprocess_image_file
+from model import load_model
 from predict import predict_digit
+from pydantic import BaseModel
+
 
 class ImagePath(BaseModel):
     """
@@ -11,12 +12,15 @@ class ImagePath(BaseModel):
     Attributes:
         path_to_img (str): Path to the image file.
     """
+
     path_to_img: str
+
 
 app = FastAPI()
 
 # Load the saved model
-model = load_model('models/mnist_model')
+model = load_model("models/mnist_model")
+
 
 @app.get("/")
 def read_root():
@@ -27,6 +31,7 @@ def read_root():
         dict: Greeting.
     """
     return {"Hello": "World"}
+
 
 @app.get("/hello/{name}")
 def hello_name(name: str):
@@ -40,6 +45,7 @@ def hello_name(name: str):
         dict: Greeting.
     """
     return {"Hello": name}
+
 
 @app.post("/predict/")
 def predict(image_path: ImagePath):
@@ -59,7 +65,8 @@ def predict(image_path: ImagePath):
     # Predict the digit
     predicted_digit, confidence = predict_digit(model, image)
 
-    return {'prediction': int(predicted_digit), 'confidence': int(confidence*100)}
+    return {"prediction": int(predicted_digit), "confidence": int(confidence * 100)}
+
 
 @app.post("/predict_file/")
 def predict_file(image_file: UploadFile = File(...)):
@@ -79,8 +86,7 @@ def predict_file(image_file: UploadFile = File(...)):
     # Predict the digit
     predicted_digit, confidence = predict_digit(model, image)
 
-    return {'prediction': int(predicted_digit), 'confidence': int(confidence*100)}
-
+    return {"prediction": int(predicted_digit), "confidence": int(confidence * 100)}
 
 
 # if __name__ == '__main__':

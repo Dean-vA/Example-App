@@ -1,7 +1,5 @@
-from azure.ai.ml import MLClient
+from azure.ai.ml import Input, MLClient, command
 from azure.identity import InteractiveBrowserCredential
-from azure.ai.ml import command
-from azure.ai.ml import Input
 
 credential = InteractiveBrowserCredential()
 
@@ -24,7 +22,7 @@ job = command(
     code="./src/number_predictor",  # location of source code
     command="python train.py --use-uri --data-path ${{inputs.data}} --test-train-ratio ${{inputs.test_train_ratio}}",
     environment=env,
-    compute=compute_target, #delete this line to use serverless compute
+    compute=compute_target,  # delete this line to use serverless compute
     display_name="number prediction",
 )
 
