@@ -13,5 +13,5 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Build and push Docker image
         run: |
-          docker build . -t your-dockerhub-username/your-repo:${{ github.sha }}
-          docker push your-dockerhub-username/your-repo:${{ github.sha }}
+          docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/digit-predict-api:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/digit-predict-api:${{ github.sha }}
