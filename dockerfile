@@ -23,4 +23,4 @@ RUN poetry config virtualenvs.create false && poetry install --only main
 RUN pip install python-multipart
 
 # Set the startup command to run your API
-ENTRYPOINT ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
+# ENTRYPOINT ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]

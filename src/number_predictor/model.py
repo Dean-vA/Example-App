@@ -1,6 +1,9 @@
 import os
 
 import tensorflow as tf
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 def create_model():
@@ -31,8 +34,17 @@ def load_model(model_path: str) -> tf.keras.Model:
         tf.keras.Model: Loaded model.
     """
     # Check if the model file exists at the specified path and load it if it does.
+    logging.info(f"Loading model from {model_path}")
+    # walk the directory to see the contents and log them
+    for root, dirs, files in os.walk(model_path):
+        logging.info(f"Root: {root}")
+        logging.info(f"Dirs: {dirs}")
+        logging.info(f"Files: {files}")
+
     if os.path.exists(model_path):
-        model = tf.keras.models.load_model(model_path)
+        logging.info("loading model")
+        model = tf.keras.models.load_model(f'{model_path}/model.keras')
+        logging.info("model loaded")
         return model
     else:
         print(f"No model file found at {model_path}")

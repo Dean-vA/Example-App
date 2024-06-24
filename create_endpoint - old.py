@@ -1,3 +1,5 @@
+# This is old please see the notebook for the new code
+
 import datetime
 
 from azure.ai.ml import MLClient

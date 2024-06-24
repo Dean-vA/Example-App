@@ -1,5 +1,7 @@
 import argparse
 import os
+# set tensorflow memory growth to true
+os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 import matplotlib.pyplot as plt
 import mlflow
@@ -7,7 +9,9 @@ import tensorflow as tf
 from load_data import (load_and_preprocess_data,
                        load_and_preprocess_data_from_uri)
 from model import create_model
+import logging
 
+logging.basicConfig(level=logging.INFO)
 
 def train(use_uri, uri=None, model_path=None, test_train_ratio=0.1) -> None:
     """
@@ -26,17 +30,33 @@ def train(use_uri, uri=None, model_path=None, test_train_ratio=0.1) -> None:
     model_path : str, optional
         Path where to save the trained model, by default None
     """
+    # Check if gpu is available
+    if tf.test.is_gpu_available():
+        print("The GPU will be used for training.")
+    else:
+        print("The CPU will be used for training.")
+
+    physical_devices = tf.config.list_physical_devices('GPU')
+    print(f"Gpus: {physical_devices}")
+    if len(physical_devices) > 0:
+        print("Setting memory growth for GPU")
+    else:
+        print("No GPU found :(")
+        
+    try:
+        tf.config.experimental.set_memory_growth(physical_devices[0], True)
+    except:
+        # Invalid device or cannot modify virtual devices once initialized.
+        print("Could not set memory growth for GPU")
+        pass
 
     # Start MLflow tracking
     mlflow.start_run()
-    mlflow.tensorflow.autolog()
+    # mlflow.tensorflow.autolog()
 
     if not use_uri:
         # Load and preprocess data
-        (train_images, train_labels), (
-            test_images,
-            test_labels,
-        ) = load_and_preprocess_data()
+        (train_images, train_labels), (test_images, test_labels) = load_and_preprocess_data()
     else:
         train_images, train_labels = load_and_preprocess_data_from_uri(uri)
 
@@ -79,7 +99,15 @@ def train(use_uri, uri=None, model_path=None, test_train_ratio=0.1) -> None:
         os.makedirs(model_path)
 
     # Save the trained model
-    model.save(model_path)
+    logging.info(f"Saving model to {model_path}/model.keras")
+    print(f"Saving model to {model_path}/model.keras")
+    model.save(f'{model_path}/model.keras')
+    # Show the files in the model directory
+    logging.info(f"Files in {model_path}")
+    for root, dirs, files in os.walk(model_path):
+        logging.info(f"Root: {root}")
+        logging.info(f"Dirs: {dirs}")
+        logging.info(f"Files: {files}")
 
     # Log the model to MLflow
     # mlflow.tensorflow.log_model(model, "model")

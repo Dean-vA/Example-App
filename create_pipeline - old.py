@@ -1,3 +1,5 @@
+# This is old please see the notebook for the new code
+
 from azure.ai.ml import Input, MLClient, Output, command, dsl
 from azure.identity import ClientSecretCredential
 from azureml.core import Workspace

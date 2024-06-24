@@ -29,14 +29,20 @@ def load_and_preprocess_data_from_uri(uri: str) -> Tuple[np.ndarray, np.ndarray]
 
     print(f"Loading data from {uri}...")
     print("Found the following folders in the directory:", os.listdir(uri))
+    # Walk the directory to see the contents and log them (folders only)
+    for root, dirs, files in os.walk(uri):
+        print(f"Root: {root}")
+        print(f"Dirs: {dirs}")
+        print(f"Files: {files}")
 
     image_list = []
     label_list = []
 
     # Iterate over all folders in base_path
-    for folder_name in os.listdir(uri):
-        folder_path = os.path.join(uri, folder_name)
-
+    print(f"Found the following folders in the base directory:", os.listdir(uri+"/mnist"))
+    for folder_name in os.listdir(uri+"/mnist"):
+        folder_path = os.path.join(uri, 'mnist',folder_name)
+        print(f"Folder path: {folder_path}")
         if os.path.isdir(folder_path):
             # Ensure the folder name can be converted to an integer
             # (i.e., 0-9 or any digit)
@@ -47,11 +53,14 @@ def load_and_preprocess_data_from_uri(uri: str) -> Tuple[np.ndarray, np.ndarray]
                     f"Non-integer folder name {folder_name} encountered. Skipping this folder."
                 )
                 continue
-
+            
+            print(f"Loading images from folder {folder_path}")
+            print(f"files in folder {os.listdir(folder_path)}")
             # Iterate over all files in the folder
             for filename in os.listdir(folder_path):
+                print(f'filename: {filename}')
                 if filename.endswith(
-                    ".jpg"
+                    ".png"
                 ):  # Assuming images are .png. Change this if needed
                     image_path = os.path.join(folder_path, filename)
                     image = Image.open(image_path)
